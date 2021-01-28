@@ -99,19 +99,19 @@ void TcpServer::clearclienttime()
 {
 	activeconnectmaplocker.mutex_lock();
 	map<int,unsigned long>::iterator iter;
-	for(iter=m_activeclient.begin();iter!=m_activeclient.end();iter++)
+	for(iter=m_activeclient.begin();iter!=m_activeclient.end();)
 	{
-		m_activeclient.erase(iter);
+		m_activeclient.erase(iter++);
 	}
 	map<int,unsigned int>::iterator iter1;
-	for(iter1=m_connecttime.begin();iter1!=m_connecttime.end();iter1++)
+	for(iter1=m_connecttime.begin();iter1!=m_connecttime.end();)
 	{
-		m_connecttime.erase(iter1);
+		m_connecttime.erase(iter1++);
 	}
 	map<int,string>::iterator iter2;
-	for(iter2=m_clientinfo.begin();iter2!=m_clientinfo.end();iter2++)
+	for(iter2=m_clientinfo.begin();iter2!=m_clientinfo.end();)
 	{
-		m_clientinfo.erase(iter2);
+		m_clientinfo.erase(iter2++);
 	}	
 	activeconnectmaplocker.mutex_unlock();		
 }
@@ -136,7 +136,7 @@ void TcpServer::setclientfd()
 {
 	activeconnectmaplocker.mutex_lock();
 	map<int,string>::iterator iter;
-	for(iter=m_clientinfo.begin();iter!=m_clientinfo.end();iter++)
+	for(iter=m_clientinfo.begin();iter!=m_clientinfo.end();++iter)
 	{
 		//printf("setclientfd fd = %d\n",iter->first);
 		FD_SET(iter->first,&rest);
@@ -148,7 +148,7 @@ int TcpServer::getclientfd()
 	int fd = -1;
 	activeconnectmaplocker.mutex_lock();
 	map<int,string>::iterator iter;
-	for(iter=m_clientinfo.begin();iter!=m_clientinfo.end();iter++)
+	for(iter=m_clientinfo.begin();iter!=m_clientinfo.end();++iter)
 	{
 		if(FD_ISSET(iter->first,&rest) == 1)
 		{
@@ -165,7 +165,7 @@ int TcpServer::getmaxfd()
 	int maxfd = -1;
 	activeconnectmaplocker.mutex_lock();
 	map<int,string>::iterator iter;
-	for(iter=m_clientinfo.begin();iter!=m_clientinfo.end();iter++)
+	for(iter=m_clientinfo.begin();iter!=m_clientinfo.end();++iter)
 	{
 		if(maxfd < iter->first)
 		{
