@@ -76,7 +76,8 @@ public://构造函数
 		{
 			delete pclient_buffer;
 			pclient_buffer = NULL;
-		}		
+		}	
+		printf("Deconstruction success.\n");
 	}
 	bool init(unsigned short svrport,ptcpFun callback,pNotifyFun notifycallback,pReadPacketFun readpacket);
 	void setclientfd();
